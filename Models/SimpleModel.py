@@ -1,41 +1,84 @@
 import threading
 import random
+import serial
+import json
+import time
+
+# Please note that this port name will have to be changed as necessary depending on what port the xbee is
+# connected to.
+PORT_NAME = 'COM3'
+DATA_HEADER = 'A'
+
+# in bytes
+DATA_LEN = 32
 
 
 class SimpleModel:
+    data = dict()
 
     def __init__(self):
-        self.data = 'Initialized. About to start Getting data'
+        self.data = self.data = {'alti': {'temp': 0, 'press': 0}, 'magn': {'x': 0, 'y': 0, 'z': 0, 'rhall': 0},
+                                 'gyro': {'x': 0, 'y': 0, 'z': 0}}
         self.threads_ok = True
-        t = threading.Thread(target=self._get_data)
-        t.start()
+        self.filename = 'AvionicsData.json'
+        data_thread = threading.Thread(target=self._get_data)
+        data_thread.start()
+
+        # radio_thread = threading.Thread(target=self._radio_input_to_file)
+        # radio_thread.start()
+
+    # def _get_data(self):
+    #     # This function is going to go ahead and read data out from the json file.
+    #
+    #     while self.threads_ok:
+    #         # do magical reading from json
+    #         pass
 
     def _get_data(self):
-        # This function should go ahead and pull data from the xbee.
-        # we are going to need a loop that checks the serial port that the xbee is on for incoming data.
-        # The current version here just has some dummy data
+        try:
+          #  with serial.Serial(PORT_NAME, 9600) as ser:
+            while self.threads_ok:
+                try:
+                    # while ser.read(1).decode('UTF-8') != DATA_HEADER:
+                    #     # keep doing the read until you get to the beginning of the data stream
+                    #     pass
+                    data_stream = bytearray.fromhex('2B09000077830100C31F000010000000BD7F0000CD180000AFFF200300020A')
+                    # ser.read(DATA_LEN - len(DATA_HEADER))
+                    self.data['alti']['temp'], self.data['alti']['press'] = \
+                        int.from_bytes(data_stream[0:4], byteorder='little'), \
+                        int.from_bytes(data_stream[4:8], byteorder='little')
 
-        # local data is a data structure intended to keep all of our data easily accessible when reading in random
-        # packets form the radio.
+                    self.data['magn']['x'], self.data['magn']['y'], self.data['magn']['z'], self.data['magn']['rhall'] = \
+                        int.from_bytes(data_stream[8:12], byteorder='little'), \
+                        int.from_bytes(data_stream[12:16], byteorder='little'), \
+                        int.from_bytes(data_stream[16:20], byteorder='little'), \
+                        int.from_bytes(data_stream[20:24], byteorder='little')
 
-        # it is structured like this:
-        # - A list of different sensors
-        #   - A dictionary with the code for that sensor as the key
-        #       - A list of dictionaries with each output of the sensor.
-        # so in this case we have the Altimeter -> alt with both of its paramaters, temperature -> temp and pressure ->
-        # press
-        # with the value of temp being 21.45 and the value of press being 500000
-        while self.threads_ok:
-            temp_val = random.randint(15, 30)
-            press_val = random.randint(200000, 800000)
-            local_data = [{'alt': [{'temp': temp_val}, {'press': press_val}]}]
+                    self.data['gyro']['x'], self.data['gyro']['y'], self.data['gyro']['z'] = \
+                        int.from_bytes(data_stream[24:26], byteorder='little'), \
+                        int.from_bytes(data_stream[26:28], byteorder='little'), \
+                        int.from_bytes(data_stream[28:30], byteorder='little')
 
-            accel_x = random.random() * 3
-            accel_y = random.random() * 3
-            accel_z = random.random() * 3
-            local_data.append({'accel': [{'x': accel_x}, {'y': accel_y}, {'z': accel_z}]})
-            self.data = local_data
+                    time_str = time.strftime("%Y,%m,%d,%H:%M:%S")
+
+                    with open(self.filename, "r") as json_file:
+                        json_data = json.load(json_file)
+                    json_data['data'][time_str] = self.data
+                    json_str = json.dumps(json_data)
+                    with open(self.filename, "w") as json_file:
+                        json_file.write(json_str)
+
+                except FileNotFoundError as file_error:
+                    time_str = time.strftime("%Y,%m,%d,%H:%M:%S")
+                    json_data = {'data': {}}
+                    json_data['data'][time_str] = self.data
+                    json_str = json.dumps(json_data)
+                    with open(self.filename, "w") as json_file:
+                        json_file.write(json_str)
+        except Exception as e:
+            print(e)
+            self.kill_threads()
+            raise ValueError("Failed to Connect to port {0}".format(PORT_NAME))
 
     def kill_threads(self):
         self.threads_ok = False
-
