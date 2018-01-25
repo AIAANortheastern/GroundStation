@@ -1,0 +1,123 @@
+body {
+    font-family: sans-serif;
+    background: #eee;
+}
+
+a,h1,h2 {
+    color: #377BA8;
+}
+
+h1,h2 {
+    font-family: 'Georgia', serif;
+    margin: 0;
+}
+
+h1 {
+    border-bottom: 2px solid #eee;
+}
+
+h2 {
+    font-size: 1.2em;
+}
+
+.page {
+    margin: 2em auto;
+    width: 50em;
+    border: 5px solid #ccc;
+    padding: 0.8em;
+    background: white;
+}
+
+.entries {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.entries li {
+    margin: 0.8em 1.2em;
+}
+
+.entries li h2 {
+    margin-left: -1em;
+}
+
+.add-entry {
+    font-size: 0.9em;
+
+}
+
+.add-entry dl {
+    font-weight: bold;
+}
+
+.metanav {
+    font-size: 0.8em;
+    padding: 0.3em;
+    background: #fafafa;
+}
+
+.flash {
+    background: #CEE5F5;
+    padding: 0.5em;
+
+}
+
+.error {
+    background: #F0D6D6;
+    padding: 0.5em;
+}
+
+.data {
+    float: right;
+}
+
+.sidenav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 200px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 1; /* Stay on top */
+    top: 0; /* Stay at the top */
+    right: 0;
+    background-color: #111; /* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 20px;
+}
+
+.sidenav .data {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 15px;
+    color: #818181;
+    display: block;
+    float: left;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidenav .data:hover {
+    color: #f1f1f1;
+}
+
+#wrapper {
+    text-align: center;
+}
+
+#footer {
+   position:absolute;
+   bottom:0;
+}
+
+#slider {
+    width:100%;
+    margin: 15px;
+}
+
+.ui-slider-horizontal {
+    height: 8px;
+    width: 600px;
+}
+
+.button {
+    position: absolute;
+    top: 50%;
+}

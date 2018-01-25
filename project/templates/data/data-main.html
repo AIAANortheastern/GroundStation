@@ -1,0 +1,62 @@
+<!doctype html>
+    <head>
+        <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">-->
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+        <script src="{{ url_for('static', filename='javascript/data.js') }}"></script>
+        <title>Data</title>
+    </head>
+    <body>
+        <a style="text-align:center" href="{{ url_for('start') }}">Home</a>
+        <a style="text-align:center" href="http://salimane.com">About</a>
+        <h1>Graph Will Go Here</h1>
+
+        <div class="sidenav">
+            <div id="gps" class="data">
+                <span style="font-weight:bold;color: #f1f1f1;">GPS Data:</span> <br>
+                <div id="longitude">Longitude:</div>
+                <div id="latitude">Latitude:</div>
+            </div>
+            <div id="gyro" class="data">
+                <span style="font-weight:bold;color: #f1f1f1;">Gyroscopic Data:</span> <br>
+                <div id="gyrox">x:</div>
+                <div id="gyroy">y:</div>
+                <div id="gyroz">z:</div>
+            </div>
+            <div id="mag" class="data">
+                <span style="font-weight:bold;color: #f1f1f1;">Magnetometer Data:</span> <br>
+                <div id="magx">x:</div>
+                <div id="magy">y:</div>
+                <div id="magz">z:</div>
+                <div id="rhall">rhall:</div>
+            </div>
+            <div id="alt" class="data">
+                <span style="font-weight:bold;color: #f1f1f1;">Altimeter Data:</span> <br>
+                <div id="pressure">Pressure:</div>
+                <div id="temperature">Temperature:</div>
+                <div id="altitude">Altitude:</div>
+            </div>
+            <div id="acc" class="data">
+                <span style="font-weight:bold;color: #f1f1f1;">Accelerometer Data:</span> <br>
+                <div id="accx">x:</div>
+                <div id="accy">y:</div>
+                <div id="accz">z:</div>
+            </div>
+        </div>
+
+        <div id="footer">
+            <div id="timestamp">YYYY:MM:DD:HH:MM:SS:mill</div>
+            <div id="slider"></div>
+        </div>
+
+
+        {% macro render_error(field) %}
+            {% if field.errors %}
+                {% for error in field.errors %}<span class='error'>{{ error }}</span>{% endfor %}
+            {% endif %}
+        {% endmacro %}
+        {% block body %}{% endblock %}
+    </body>
+</html>

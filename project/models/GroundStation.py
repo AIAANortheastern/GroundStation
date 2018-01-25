@@ -3,26 +3,48 @@ import serial
 import json
 import time
 import math
+import os
 
 # Please note that this port name will have to be changed as necessary depending on what port the xbee is
 # connected to.
-PORT_NAME = 'COM5'
+PORT_NAME = None
 DATA_HEADER = 'A'
 
 # in bytes
 DATA_LEN = 32
 
 
-class SimpleModel:
+class FlaskModel:
     data = dict()
 
-    def __init__(self):
-        self.data = {'alti': {'temp': 0, 'press': 0, 'altitude': 0}, 'magn': {'x': 0, 'y': 0, 'z': 0, 'rhall': 0},
-                                 'gyro': {'x': 0, 'y': 0, 'z': 0}}
+    def __init__(self, port=None):
+        # csv structure 'timestamp,altitude,pressure,temperature,gyrox,gyroy,gyroz,magx,magy,magz,rhall\n'
+        self.data = {'timestamp': time.strftime("%Y,%m,%d,%H:%M:%S"), 'altitude': 0, 'pressure': None,
+                     'temperature': None, 'gyrox': None, 'gyroy': None, 'gyroz': None, 'magx': None, 'magy': None,
+                     'magz': None, 'longitude': None, 'latitude': None, 'rhall': None, 'slider_pos': 0}
+# {'alti': {'temp': 0, 'press': 0, 'altitude': 0}, 'magn': {'x': 0, 'y': 0, 'z': 0, 'rhall': 0},
+#                   'gyro': {'x': 0, 'y': 0, 'z': 0}}
         self.threads_ok = True
-        self.filename = 'AvionicsData.json'
-        data_thread = threading.Thread(target=self._get_data)
-        data_thread.start()
+        self.filename = 'AvionicsData.csv'
+        global PORT_NAME
+        PORT_NAME = port
+        if PORT_NAME is not None:
+            data_thread = threading.Thread(target=self._get_data_from_radio())
+            data_thread.start()
+        else:
+            self.data_pos = dict()
+            with open(self.filename, 'r') as f:
+                first_line = f.readline()
+                for key, data in self.data.items():
+                    # for each key figure out what order it is in in the file.
+                    try:
+                        self.data_pos[key] = first_line.split(',').index(key)
+                    except ValueError:
+                        self.data_pos[key] = -1
+
+
+
+            # load the data from the file to start parsing through it
 
         # radio_thread = threading.Thread(target=self._radio_input_to_file)
         # radio_thread.start()
@@ -34,7 +56,7 @@ class SimpleModel:
     #         # do magical reading from json
     #         pass
 
-    def _get_data(self):
+    def _get_data_from_radio(self):
         try:
             with serial.Serial(PORT_NAME, 9600) as ser:
                 while self.threads_ok:
@@ -87,6 +109,40 @@ class SimpleModel:
             print(e)
             self.kill_threads()
             raise ValueError("Failed to Connect to port {0}".format(PORT_NAME))
+
+    def get_first_line_data(self):
+        with open(self.filename, "rb") as f:
+            first = f.readline()  # Read the first line.
+            self.get_data_from_csv_line(first)
+            return self.data
+
+    def get_next_line_data(self):
+        pass
+
+    def get_prev_line_data(self):
+        pass
+
+    def get_value_with_slider(self, slider_val):
+        pass
+
+    def get_recent_data(self):
+        # Read the last line of the file efficiently
+        # https://stackoverflow.com/questions/3346430/what-is-the-most-efficient-way-to-get-first-and-last-line-of-a-text-file
+        with open(self.filename, "rb") as f:
+            first = f.readline()  # Read the first line.
+            f.seek(-2, os.SEEK_END)  # Jump to the second last byte.
+            while f.read(1) != b"\n":  # Until EOL is found...
+                f.seek(-2, os.SEEK_CUR)  # ...jump back the read byte plus one more.
+            last = f.readline().decode('utf-8')  # Read last line.
+            self.get_data_from_csv_line(last)
+            self.data['slider_pos'] = 1000
+            return self.data
+
+    def get_data_from_csv_line(self, line):
+        # use the self.data_pos structure to properly read data values in the correct order.
+        array = line.split(',')
+        for key, value in self.data.items():
+            self.data[key] = array[self.data_pos[key]]
 
     def kill_threads(self):
         self.threads_ok = False
