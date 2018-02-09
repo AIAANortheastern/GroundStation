@@ -4,7 +4,8 @@ import json
 import time
 import math
 import os
-
+import mmap
+import linecache
 # Please note that this port name will have to be changed as necessary depending on what port the xbee is
 # connected to.
 PORT_NAME = None
@@ -32,6 +33,7 @@ class FlaskModel:
             data_thread = threading.Thread(target=self._get_data_from_radio())
             data_thread.start()
         else:
+            self.file_length = self.data_length()
             self.data_pos = dict()
             with open(self.filename, 'r') as f:
                 first_line = f.readline()
@@ -113,7 +115,7 @@ class FlaskModel:
     def get_first_line_data(self):
         with open(self.filename, "rb") as f:
             first = f.readline()  # Read the first line.
-            self.get_data_from_csv_line(first)
+            self.get_data_from_csv_line(first.decode('utf-8'))
             return self.data
 
     def get_next_line_data(self):
@@ -143,6 +145,29 @@ class FlaskModel:
         array = line.split(',')
         for key, value in self.data.items():
             self.data[key] = array[self.data_pos[key]]
+        return array
+
+    def get_data_in_range(self, start, stop):
+        array =[]
+        start = int(start)
+        stop = int(stop)
+        if stop > self.data_length or start > self.data_length:
+            return "error"
+
+        for x in range(start, stop):
+            array.append(linecache.getline(os.path.abspath(self.filename), x))
+            array[x-start] = self.get_data_from_csv_line(array[x-start])
+        linecache.clearcache()
+        return array
+
+    def data_length(self):
+        f = open(self.filename, "r+")
+        buf = mmap.mmap(f.fileno(), 0)
+        lines = 0
+        read_line = buf.readline
+        while read_line():
+            lines += 1
+        return lines
 
     def kill_threads(self):
         self.threads_ok = False

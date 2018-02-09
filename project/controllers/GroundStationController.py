@@ -2,7 +2,7 @@
 from project import app
 from flask import render_template
 from project.models.GroundStation import FlaskModel
-from flask import jsonify
+from flask import jsonify, request
 
 model = None
 
@@ -23,13 +23,28 @@ def data():
 # is ok we rely on the model
 @app.route('/data-recent/', methods=['GET'])
 def data_recent():
-    global model
+    model = FlaskModel()
     ret_data = model.get_recent_data()
     return jsonify(ret_data)
 
 
 @app.route('/data-first/', methods=['GET'])
 def data_first():
-    global model
+    model = FlaskModel()
     ret_data = model.get_first_line_data()
+    return jsonify(ret_data)
+
+@app.route('/data-length/', methods=['GET'])
+def data_length():
+    model = FlaskModel()
+    ret_data = model.data_length()
+    return jsonify(ret_data)
+
+@app.route('/data-range/', methods=['GET'])
+def data_range():
+    model = FlaskModel()
+    start = request.args.get('start')
+    end = request.args.get('end')
+
+    ret_data = model.get_data_in_range(start, end)
     return jsonify(ret_data)
