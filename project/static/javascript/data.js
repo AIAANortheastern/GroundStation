@@ -1,18 +1,49 @@
 $(document).ready(function () {
 
     var width = $( window ).width();
-
-    $.ajax({url: '/data-recent/', success: function(result){
-        process_ajax_result(result);
+    var csv_length = 0;
+    current_data = []
+    $.ajax({url: '/data-length/', success: function(result){
+        csv_length = result;
+        $( function() {
+            $( "#slider" ).slider({
+                orientation: "horizontal",
+                max: csv_length,
+                min: 1,
+                slide: function(event, ui) {
+                    start_value = ui.value -10; // get the other side of values -- eventually want to make this modifiable too
+                    $.ajax({url: '/data-range/',data: "start="+start_value+"&end="+ui.value , success: function(result){
+                        current_data = result;
+                        set_sidebar(current_data[0]);
+                    }});
+                }
+            }).width(width - $(".sidenav").width() - 50);
+         } );
     }});
 
-    $( function() {
-        $( "#slider" ).slider({
-            orientation: "horizontal",
-            max: 1000,
-            min: 0
-        }).width(width - $(".sidenav").width() - 50);
-  } );
+    function set_sidebar(data_array){
+    $("#altitude").text("Altitude: "+data_array[1])
+    $("#pressure").text("Pressure: "+data_array[2])
+    $("#temperature").text("Temperature: "+data_array[3])
+    $("#gyrox").text(data_array[4])
+    $("#gyroy").text(data_array[5])
+    $("#gyroz").text(data_array[6])
+    $("#magx").text(data_array[7])
+    $("#magy").text(data_array[8])
+    $("#magz").text(data_array[9])
+    $("#rhall").text(data_array[10])
+
+    //$("#longitude").value = data_array
+    //$("#latitude").value = data_array
+
+    //$("#accx").value = data_array
+    //$("#accy").value = data_array
+    //$("#accz").value = data_array
+    }
+
+    function get_data(result, start, stop){
+
+    }
 
     function process_ajax_result(result){
         console.log(result);

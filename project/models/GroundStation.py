@@ -149,9 +149,8 @@ class FlaskModel:
 
     def get_data_in_range(self, start, stop):
         array =[]
-        start = int(start)
-        stop = int(stop)
-        if stop > self.data_length or start > self.data_length:
+
+        if stop > self.file_length or start > self.file_length:
             return "error"
 
         for x in range(start, stop):
@@ -161,13 +160,13 @@ class FlaskModel:
         return array
 
     def data_length(self):
-        f = open(self.filename, "r+")
-        buf = mmap.mmap(f.fileno(), 0)
-        lines = 0
-        read_line = buf.readline
-        while read_line():
-            lines += 1
-        return lines
+        with open(self.filename, "r+") as f:
+            buf = mmap.mmap(f.fileno(), 0)
+            lines = 0
+            read_line = buf.readline
+            while read_line():
+                lines += 1
+            return lines
 
     def kill_threads(self):
         self.threads_ok = False

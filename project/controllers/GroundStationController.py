@@ -43,8 +43,8 @@ def data_length():
 @app.route('/data-range/', methods=['GET'])
 def data_range():
     model = FlaskModel()
-    start = request.args.get('start')
-    end = request.args.get('end')
+    start = int(request.args.get('start'))
+    end = int(request.args.get('end'))
 
     ret_data = model.get_data_in_range(start, end)
     return jsonify(ret_data)
