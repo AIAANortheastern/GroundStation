@@ -18,7 +18,7 @@ def data():
     try:
         model = FlaskModel()
     except ModuleNotFoundError:
-        pass
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     return render_template('data/data-main.html', data=model.data)
 
 
@@ -29,7 +29,7 @@ def data_recent():
     try:
         model = FlaskModel()
     except ModuleNotFoundError:
-        pass
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.get_recent_data()
     return jsonify(ret_data)
 
@@ -39,7 +39,7 @@ def data_first():
     try:
         model = FlaskModel()
     except ModuleNotFoundError:
-        pass
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.get_first_line_data()
     return jsonify(ret_data)
 
@@ -48,7 +48,7 @@ def data_length():
     try:
         model = FlaskModel()
     except ModuleNotFoundError:
-        pass
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.data_length()
     return jsonify(ret_data)
 
@@ -57,7 +57,7 @@ def data_range():
     try:
         model = FlaskModel()
     except ModuleNotFoundError:
-        pass
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     start = int(request.args.get('start'))
     end = int(request.args.get('end'))
     if (start < 1) or (end <= start) or (end > model.file_length):
