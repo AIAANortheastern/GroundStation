@@ -23,8 +23,8 @@ class FlaskModel:
         self.data = {'timestamp': time.strftime("%Y,%m,%d,%H:%M:%S"), 'altitude': 0, 'pressure': None,
                      'temperature': None, 'gyrox': None, 'gyroy': None, 'gyroz': None, 'magx': None, 'magy': None,
                      'magz': None, 'longitude': None, 'latitude': None, 'rhall': None, 'slider_pos': 0}
-# {'alti': {'temp': 0, 'press': 0, 'altitude': 0}, 'magn': {'x': 0, 'y': 0, 'z': 0, 'rhall': 0},
-#                   'gyro': {'x': 0, 'y': 0, 'z': 0}}
+    # {'alti': {'temp': 0, 'press': 0, 'altitude': 0}, 'magn': {'x': 0, 'y': 0, 'z': 0, 'rhall': 0},
+    #                   'gyro': {'x': 0, 'y': 0, 'z': 0}}
         self.threads_ok = True
         self.filename = 'AvionicsData.csv'
         global PORT_NAME
@@ -39,8 +39,9 @@ class FlaskModel:
                 first_line = f.readline()
                 for key, data in self.data.items():
                     # for each key figure out what order it is in in the file.
+                    self.array = first_line.split(',');
                     try:
-                        self.data_pos[key] = first_line.split(',').index(key)
+                        self.data_pos[key] = self.array.index(key)
                     except ValueError:
                         self.data_pos[key] = -1
 
@@ -142,17 +143,18 @@ class FlaskModel:
 
     def get_data_from_csv_line(self, line):
         # use the self.data_pos structure to properly read data values in the correct order.
+        line = line.split("\n")[0]
+        # gets rid of \n character
         array = line.split(',')
         for key, value in self.data.items():
-            self.data[key] = array[self.data_pos[key]]
+            if value == -1:
+                continue
+            else:
+                self.data[key] = array[self.data_pos[key]]
         return array
 
-    def get_data_in_range(self, start, stop):
-        array =[]
-
-        if stop > self.file_length or start > self.file_length:
-            return "error"
-
+    def get_data_in_range(self, start, stop): #error catching must be in controller
+        array = []
         for x in range(start, stop):
             array.append(linecache.getline(os.path.abspath(self.filename), x))
             array[x-start] = self.get_data_from_csv_line(array[x-start])

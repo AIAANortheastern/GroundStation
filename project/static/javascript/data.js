@@ -2,7 +2,10 @@ $(document).ready(function () {
 
     var width = $( window ).width();
     var csv_length = 0;
-    current_data = []
+    current_data = [];
+    var element_order = [];
+    var graph_div = 'graph';
+
     $.ajax({url: '/data-length/', success: function(result){
         csv_length = result;
         $( function() {
@@ -10,6 +13,12 @@ $(document).ready(function () {
                 orientation: "horizontal",
                 max: csv_length,
                 min: 1,
+                create: function(event, ui){
+                    $.ajax({url: '/data-range/',data: "start="+1+"&end="+10 , success: function(result){
+                        init_graph(result, 1);
+                        set_sidebar_init(result);
+                    }})
+                },
                 slide: function(event, ui) {
                     difference = 10;
                     end_value = ui.value;
@@ -17,74 +26,101 @@ $(document).ready(function () {
                     end_value = difference + 2;
                     }
                     start_value = end_value - difference; // get the other side of values -- eventually want to make this modifiable too
-                    $.ajax({url: '/data-range/',data: "start="+start_value+"&end="+end_value , success: function(result){
-                        current_data = result;
-                        set_sidebar(current_data[0]);
-                        graph(current_data)
+                    $.ajax({url: '/data-range/',data: "start="+start_value+"&end="+end_value , success: function(current_data){
+                        set_sidebar(current_data); //set sidebar to exactly where the slider is
+                        update_graph(current_data, 1);
                     }});
                 }
             }).width(width - $(".sidenav").width() - 50);
          } );
     }});
-    function graph(data){
-        var altitude = [{
+
+    function init_graph(input_data, data_slot){
+        console.log(input_data);
+        data = reformat_all_data(input_data, data_slot);
+        Plotly.newPlot(graph_div, data);
+    }
+
+    function update_graph(input_data, data_slot){
+        data_update = reformat_all_data(input_data, data_slot);
+        range = get_range_of_array(input_data, data_slot);
+        range_update = {
+            title: 'Data at ' + data_update[0].x[0], // updates the title
+            'xaxis.range': [reformat_date(input_data[0][0]), reformat_date(input_data[input_data.length-1][0])],   // updates the xaxis range
+            'yaxis.range': [range[0],range[1]]     // updates the end of the yaxis range
+        };
+
+        Plotly.animate(div=graph_div, {
+            data: data_update,
+            traces: [0], /* With a bit of work, you can list any other traces you
+                 want to update too (e.g. make a for loop over trace++ and set
+                 update[trace] at each iteration) */
+            layout: range_update
+        }, {
+            // These 2 make sure the plot updates as quickly as possible:
+            transition: {duration: 0},
+            frame: {duration: 0, redraw: false}
+        });
+    }
+
+    function get_range_of_array (data, position){
+        array = [];
+        for(var i = 0; i < data.length; i++){
+            array[i] = data[i][position];
+        }
+        return [Array.min(array), Array.max(array)];
+    }
+
+    function reformat_all_data(data, position){ //this will take the data from the api and put it into the plotly.js graph data format
+         var data_type = [{
             x: [],
             y: [],
             type: 'scatter'
         }];
-        for (var i = 0; i < data.length; i++){
-            altitude[0].x[i]= reformat_date(data[i][0]);
-            altitude[0].y[i]= parseFloat(data[i][1]);
+        var i = 0;
+        if(data[0][0] == 'timestamp')
+        {i=1} //if the first line is the headers, skip it
+        for (; i < data.length; i++){
+            data_type[0].x[i]= reformat_date(data[i][0]);
+            data_type[0].y[i]= parseFloat(data[i][position]);
         }
-        console.log(altitude);
-        Plotly.newPlot('altitude_graph', altitude);
+        return data_type;
     }
-    function reformat_date(date){
+
+    function reformat_date(date){ //this converts dates to a plotly.js friendly format
         date = date.split(":");
         return (date[0]+'-'+date[1]+'-'+date[2]+' '+date[3]+':'+date[4]+":"+date[5])
     }   // needs to be 2013-10-04 22:23:00
 
+    Array.min = function( array ){
+        return Math.min.apply( Math, array );
+    };
+
+    Array.max = function( array ){
+        return Math.max.apply( Math, array );
+    };
+
+    function set_sidebar_init(data_array){
+        element_order = data_array[0];
+        for(var i = 0; i < data_array[0].length; i++){
+            $('#'+element_order[i]).text(element_order[i] +': '+ Math.round(data_array[1][i] * 100) / 100 );
+        }
+    }
     function set_sidebar(data_array){
-        $("#altitude").text("Altitude: "+data_array[1])
-        $("#pressure").text("Pressure: "+data_array[2])
-        $("#temperature").text("Temperature: "+data_array[3])
-        $("#gyrox").text("x: "+data_array[4])
-        $("#gyroy").text("y: "+data_array[5])
-        $("#gyroz").text("z: "+data_array[6])
-        $("#magx").text("x: "+data_array[7])
-        $("#magy").text("y: "+data_array[8])
-        $("#magz").text("z: "+data_array[9])
-        $("#rhall").text("rhall: "+data_array[10])
-
-    //$("#longitude").value = data_array // need more data for these
-    //$("#latitude").value = data_array
-
-    //$("#accx").value = data_array
-    //$("#accy").value = data_array
-    //$("#accz").value = data_array
+        for(var i = 0; i < data_array[0].length; i++){
+            $('#'+element_order[i]).text(element_order[i] +': '+ Math.round(data_array[1][i] * 100) / 100 );
+        }
     }
 
-    function get_data(result, start, stop){
+Math.round(1.005 * 1000)/1000
 
-    }
+    window.onresize = function() {
+        Plotly.Plots.resize(graph_div);
+        var width = $( window ).width();
+        $( "#slider" ).width(width - $(".sidenav").width() - 50);
+    };
 
-    function process_ajax_result(result){
-        console.log(result);
-        keys = Object.keys(result);
-        keys.forEach(function(element) {
-            if(element === 'timestamp') {
-                $('#' + element).text(result[element])
-            }
-            else if(element === 'slider_pos') {
-                $('#slider').slider('value', result[element])
-            }
-            else {
-                var index = $('#' + element).text().indexOf(':');
-                var substr = $('#' + element).text().substring(0, index + 1)
-                $('#' + element).text(substr + ' ' + result[element])
-            }
-        });
-    }
+
 
   $(document).keydown(function(e) {
     switch(e.which) {
@@ -109,6 +145,6 @@ $(document).ready(function () {
         default: return; // exit this handler for other keys
     }
     e.preventDefault(); // prevent the default action (scroll / move caret)
-});
+    });
 
 });
