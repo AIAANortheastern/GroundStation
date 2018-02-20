@@ -61,7 +61,6 @@ def data_range():
     start = int(request.args.get('start'))
     end = int(request.args.get('end'))
     if (start < 1) or (end <= start) or (end > model.file_length):
-        error_message = 'START/END OUT OF RANGE'
         return jsonify({"code":"invalid_num","message":"Arguments were out of range or incorrect","data":{"status":404}})
 
     ret_data = model.get_data_in_range(start, end)
