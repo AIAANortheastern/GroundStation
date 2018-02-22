@@ -19,7 +19,7 @@ $(document).ready(function() {
                             url: '/data-range/',
                             data: "start=" + 1 + "&end=" + 10,
                             success: function(result) {
-                                console.log(result);
+                                //console.log(result);
                                 set_sidebar_init(result);
                             }
                         })
@@ -63,8 +63,8 @@ $(document).ready(function() {
         newdiv = document.createElement("div");
         $(newdiv).attr('id', name);
         $(newdiv).attr('num', num);
-        console.log(name);
-        console.log($("#graphs").append(newdiv));
+        //console.log(name);
+        //console.log($("#graphs").append(newdiv));
     }
 
     function update_graph(input_data, data_slot) {
@@ -75,7 +75,7 @@ $(document).ready(function() {
             'xaxis.range': [reformat_date(input_data[0][0]), reformat_date(input_data[input_data.length - 1][0])], // updates the xaxis range
             'yaxis.range': [range[0], range[1]] // updates the end of the yaxis range
         };
-        console.log(range_update);
+        //console.log(range_update);
         Plotly.animate(div = graph_div + data_slot, {
             data: data_update,
             traces: [0],
@@ -138,15 +138,12 @@ $(document).ready(function() {
         for (var i = 0; i < data_array[0].length; i++) {
             $('#' + element_order[i]).text(element_order[i] + ': ' + Math.round(data_array[1][i] * 100) / 100);
             $('#' + element_order[i]).attr('num', i);
-            if(i < 0){
-            $('#'+element_order[i]).click(function(element) {
-                console.log(data_array);
-                console.log(element.currentTarget.getAttribute("num"));
-                attribute_clicked(element.currentTarget.getAttribute("num"), data_array);
-            });
+            if(i >=1){
+                $('#'+element_order[i]).click(function(element) {
+                    attribute_clicked(element.currentTarget.getAttribute("num"), data_array);
+                });
             }
         }
-
     }
 
     function set_sidebar(data_array) {
@@ -160,7 +157,7 @@ $(document).ready(function() {
             Plotly.purge('graph' + attribute);
             $('#graph' + attribute).remove();
         } else {
-            console.log(attribute);
+            //console.log(attribute);
             make_graph_div('graph' + attribute, attribute);
             init_graph(data_array, attribute);
         }
