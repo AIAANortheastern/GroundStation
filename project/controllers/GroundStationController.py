@@ -2,7 +2,7 @@
 from project import app
 from flask import render_template
 from project.models.GroundStation import FlaskModel
-from flask import jsonify
+from flask import jsonify, request
 
 model = None
 
@@ -15,7 +15,10 @@ def start():
 @app.route('/data-main', methods=['GET'])
 def data():
     global model
-    model = FlaskModel()
+    try:
+        model = FlaskModel()
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     return render_template('data/data-main.html', data=model.data)
 
 
@@ -24,12 +27,46 @@ def data():
 @app.route('/data-recent/', methods=['GET'])
 def data_recent():
     global model
+    try:
+        if model is None:
+            raise ModuleNotFoundError
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.get_recent_data()
     return jsonify(ret_data)
 
 
 @app.route('/data-first/', methods=['GET'])
 def data_first():
-    global model
+    try:
+        if model is None:
+            raise ModuleNotFoundError
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.get_first_line_data()
+    return jsonify(ret_data)
+
+@app.route('/data-length/', methods=['GET'])
+def data_length():
+    try:
+        if model is None:
+            raise ModuleNotFoundError
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
+    ret_data = model.data_length()
+    return jsonify(ret_data)
+
+@app.route('/data-range/', methods=['GET'])
+def data_range():
+    try:
+        if model is None:
+            raise ModuleNotFoundError
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
+    start = int(request.args.get('start'))
+    end = int(request.args.get('end'))
+    if (start < 1) or (end <= start) or (end > model.file_length):
+        return jsonify({"code":"invalid_num","message":"Arguments were out of range or incorrect","data":{"status":404}})
+
+    ret_data = model.get_data_in_range(start, end)
     return jsonify(ret_data)
