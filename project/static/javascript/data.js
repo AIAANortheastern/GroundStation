@@ -43,8 +43,7 @@ $(document).ready(function() {
                                     var tableChild = children[i];
                                     var t0 = performance.now();
                                     update_graph(current_data, tableChild.getAttribute("num"));
-                                    var t1 = performance.now();
-                                    console.log("Call to update_graph took " + (t1 - t0) + " milliseconds.")
+                                    console.log("Call to update_graph took " + (performance.now() - t0) + " milliseconds.")
                                 }
                             }
                         });
@@ -56,22 +55,24 @@ $(document).ready(function() {
 
     function init_graph(input_data, data_slot) {
         data = reformat_all_data(input_data, data_slot);
-        Plotly.newPlot(graph_div + data_slot, data);
+        element_order = input_data[0];
+        console.log(data);
+        title_data =  {title: element_order[data_slot]+' at ' + data[0].x[1]}
+        Plotly.newPlot(graph_div + data_slot, data, title_data);
     }
 
     function make_graph_div(name, num) {
         newdiv = document.createElement("div");
         $(newdiv).attr('id', name);
         $(newdiv).attr('num', num);
-        //console.log(name);
-        //console.log($("#graphs").append(newdiv));
+        $("#graphs").append(newdiv);
     }
 
     function update_graph(input_data, data_slot) {
         data_update = reformat_all_data(input_data, data_slot);
         range = get_range_of_array(input_data, data_slot);
         range_update = {
-            title: 'Data at ' + data_update[0].x[0], // updates the title
+            title: element_order[data_slot]+' at ' + data_update[0].x[0], // updates the title
             'xaxis.range': [reformat_date(input_data[0][0]), reformat_date(input_data[input_data.length - 1][0])], // updates the xaxis range
             'yaxis.range': [range[0], range[1]] // updates the end of the yaxis range
         };
@@ -135,15 +136,33 @@ $(document).ready(function() {
 
     function set_sidebar_init(data_array) {
         element_order = data_array[0];
+        console.log(data_array);
         for (var i = 0; i < data_array[0].length; i++) {
             $('#' + element_order[i]).text(element_order[i] + ': ' + Math.round(data_array[1][i] * 100) / 100);
             $('#' + element_order[i]).attr('num', i);
-            if(i >=1){
+            if(i >= 1){
                 $('#'+element_order[i]).click(function(element) {
+                    if($(this).css("color") === "rgb(168, 219, 146)"){
+                    $(this).css("background","#AA3939");
+                    $(this).css("color","#FFAAAA");
+                    }
+                    else{
+                    $(this).css("background","#4E9231");
+                    $(this).css("color","#A8DB92");
+                    }
                     attribute_clicked(element.currentTarget.getAttribute("num"), data_array);
                 });
             }
         }
+        $("button")
+            .button( {
+                text: true
+            } )
+            .css("background","#AA3939")
+            .css("color","#FFAAAA")
+            .css("padding","5px 10px")
+            .css("margin","3px 2px")
+            .css("border","none");
     }
 
     function set_sidebar(data_array) {
@@ -157,7 +176,6 @@ $(document).ready(function() {
             Plotly.purge('graph' + attribute);
             $('#graph' + attribute).remove();
         } else {
-            //console.log(attribute);
             make_graph_div('graph' + attribute, attribute);
             init_graph(data_array, attribute);
         }

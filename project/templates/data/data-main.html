@@ -13,6 +13,9 @@
     <body>
         <a style="text-align:center" href="{{ url_for('start') }}">Home</a>
         <a style="text-align:center" href="http://salimane.com">About</a>
+        <div >
+            <div id="slider"></div>
+        </div>
         <div class = 'graph' id ="graphs"></div>
         <div class="sidenav">
             <div id="gps" class="data">
@@ -22,15 +25,15 @@
             </div>
             <div id="gyro" class="data">
                 <span style="font-weight:bold;color: #f1f1f1;">Gyroscopic Data:</span> <br>
-                <button id="gyrox">x:</button>
-                <button id="gyroy">y:</button>
-                <button id="gyroz">z:</button>
+                <button class="ui-button ui-corner-all ui-widget" id="gyrox">x:</button>
+                <button class="ui-button ui-corner-all ui-widget" id="gyroy">y:</button>
+                <button class="ui-button ui-corner-all ui-widget" id="gyroz">z:</button>
             </div>
             <div id="mag" class="data">
                 <span style="font-weight:bold;color: #f1f1f1;">Magnetometer Data:</span> <br>
-                <button id="magx">x:</button>
-                <button id="magy">y:</button>
-                <button id="magz">z:</button>
+                <button class="ui-button ui-corner-all ui-widget" id="magx">x:</button>
+                <button class="ui-button ui-corner-all ui-widget" id="magy">y:</button>
+                <button class="ui-button ui-corner-all ui-widget" id="magz">z:</button>
                 <button id="rhall">rhall:</button>
             </div>
             <div id="alt" class="data">
@@ -45,10 +48,6 @@
                 <button id="accy">y:</button>
                 <button id="accz">z:</button>
             </div>
-        </div>
-
-        <div id="footer">
-            <div id="slider"></div>
         </div>
 
 

@@ -26,8 +26,10 @@ def data():
 # is ok we rely on the model
 @app.route('/data-recent/', methods=['GET'])
 def data_recent():
+    global model
     try:
-        model = FlaskModel()
+        if model is None:
+            raise ModuleNotFoundError
     except ModuleNotFoundError:
         return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.get_recent_data()
@@ -37,7 +39,8 @@ def data_recent():
 @app.route('/data-first/', methods=['GET'])
 def data_first():
     try:
-        model = FlaskModel()
+        if model is None:
+            raise ModuleNotFoundError
     except ModuleNotFoundError:
         return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.get_first_line_data()
@@ -46,7 +49,8 @@ def data_first():
 @app.route('/data-length/', methods=['GET'])
 def data_length():
     try:
-        model = FlaskModel()
+        if model is None:
+            raise ModuleNotFoundError
     except ModuleNotFoundError:
         return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     ret_data = model.data_length()
@@ -55,7 +59,8 @@ def data_length():
 @app.route('/data-range/', methods=['GET'])
 def data_range():
     try:
-        model = FlaskModel()
+        if model is None:
+            raise ModuleNotFoundError
     except ModuleNotFoundError:
         return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
     start = int(request.args.get('start'))

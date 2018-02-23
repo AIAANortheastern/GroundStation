@@ -1,10 +1,10 @@
 $(document).ready(function() {
     $('#to_data').click(function(element) {
-        var url = "data-main";
+        var url = "";
         $(location).attr('href',window.location.href+url);
     });
     $('#add_csv').click(function(element) {
-        var url = "";
+        var url = "data-main";
         $(location).attr('href',window.location.href+url);
     });
     $('#more_info').click(function(element) {
