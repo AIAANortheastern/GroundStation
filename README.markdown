@@ -43,7 +43,9 @@ Ex:
         
 1. Open up your favorite browser and go to the following link:
 
-localhost:8080
+[localhost:8080](localhost:8080)
+
+1. Click on "Use Existing Data"
         
         
 ## How to use my own data?
