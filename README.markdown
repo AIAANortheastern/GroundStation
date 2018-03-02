@@ -29,7 +29,8 @@ then you are either going to have to do some magic to get them both working
 side by side or to uninstall python 2. 
 
     <a name="Step4"></a>
-1. Clone or download the directory
+1. Clone or download the project using the big green button above
+1. Unzip the folder
 1. Open up a terminal or command prompt and navigate to 
 the installed directory using the cd command
 Ex: 
@@ -42,7 +43,9 @@ Ex:
         
 1. Open up your favorite browser and go to the following link:
 
-localhost:8080
+[localhost:8080](localhost:8080)
+
+1. Click on "Use Existing Data"
         
         
 ## How to use my own data?
