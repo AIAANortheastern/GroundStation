@@ -1,0 +1,7 @@
+{
+  "name": "GroundStation",
+  "description": "This application is designed to put real time radio data into a csv file and display that data graphically in real time graphically.",
+  "image": "heroku/python",
+  "repository": "https://github.com/AIAANortheastern/GroundStation.git",
+  "keywords": ["python" ]
+}
