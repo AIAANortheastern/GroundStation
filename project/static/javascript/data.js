@@ -1,10 +1,10 @@
 $(document).ready(function() {
-
     var width = $(window).width();
     var csv_length = 0;
-    current_data = [];
+    var current_data = [];
     var element_order = [];
     var graph_div = 'graph';
+    var difference = 20;
     $.ajax({
         url: '/data-length/',
         success: function(result) {
@@ -17,7 +17,7 @@ $(document).ready(function() {
                     create: function(event, ui) {
                         $.ajax({
                             url: '/data-range/',
-                            data: "start=" + 1 + "&end=" + 10,
+                            data: "start=" + 1 + "&end=" + difference,
                             success: function(result) {
                                 //console.log(result);
                                 set_sidebar_init(result);
@@ -25,7 +25,6 @@ $(document).ready(function() {
                         })
                     },
                     stop: function(event, ui) {
-                        difference = 10;
                         end_value = ui.value;
                         if (end_value - difference < 2) { // first line is headers
                             end_value = difference + 2;
@@ -112,7 +111,7 @@ $(document).ready(function() {
         }];
         var i = 0;
         if (data[0][0] == 'timestamp') {
-            i = 1
+            i = 1;
         } //if the first line is the headers, skip it
         for (; i < data.length; i++) {
             data_type[0].x[i] = reformat_date(data[i][0]);
