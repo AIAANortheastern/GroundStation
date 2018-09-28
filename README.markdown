@@ -19,7 +19,7 @@ to [step 4.](#Step4)
 
         python -V
         
-1. You should see a version of 3.6.x. If you don't then
+1. You should see a version of 3.x.x. If you don't then
 you can install the latest and greatest version of python 
 [HERE ](https://www.python.org/downloads/)
 
@@ -37,11 +37,15 @@ Ex:
 
         cd c:/Users/username/path/to/install/GroundStation
 
+1. Run this command to install the correct packages:
+
+        pip install -r requirements.txt
+        
 1. Run the following command to actually run the application:
 
         python runserver.py
         
-1. Open up your favorite browser and go to the following link:
+1. Open up your favorite browser and go to the following link (or the provided link from the console):
 
 [localhost:8080](localhost:8080)
 
@@ -74,3 +78,11 @@ else.
 1. Run the groundstation by following the instructions
 [In Running the application.](#RunApp)
 
+# Features in Development
+
+In order of complexity
+- Add a slider that selectes the range of displayed data
+- Render the graphs in parallel (using async)
+- Make column parsing completely independent of existing buttons
+- Implement the real-time data parser
+- Move server to a Raspberry Pi (3)

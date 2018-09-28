@@ -1,0 +1,16 @@
+blinker==1.4
+certifi==2018.8.24
+click==6.7
+Flask==1.0.2
+Flask-DebugToolbar==0.10.1
+future==0.16.0
+iso8601==0.1.12
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+pipenv==2018.7.1
+PyYAML==3.13
+serial==0.0.69
+virtualenv==16.0.0
+virtualenv-clone==0.3.0
+Werkzeug==0.14.1
