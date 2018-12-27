@@ -1,53 +1,60 @@
 $(document).ready(function() {
-    var width = $(window).width();
-    var csv_length = 0;
-    var current_data = [];
-    var element_order = [];
-    var graph_div = 'graph';
-    var difference = 20;
+    let filename = localStorage.getItem("filename");
+    $("#data_name").text("File selected: "+filename);
+    let width = $("#slider").width();
+    let csv_length = 0;
+    let current_data = [];
+    let element_order = [];
+    let graph_div = 'graph';
+    let difference = 10;
     $.ajax({
         url: '/data-length/',
+        data: {"filename": filename},
         success: function(result) {
             csv_length = result;
             $(function() {
-                $("#slider").slider({
+            var mySlider =  $("#slider").slider();
+               mySlider
+                .slider({
                     orientation: "horizontal",
                     max: csv_length,
-                    min: 1,
-                    create: function(event, ui) {
-                        $.ajax({
-                            url: '/data-range/',
-                            data: "start=" + 1 + "&end=" + difference,
-                            success: function(result) {
-                                //console.log(result);
-                                set_sidebar_init(result);
-                            }
-                        })
-                    },
-                    stop: function(event, ui) {
-                        end_value = ui.value;
-                        if (end_value - difference < 2) { // first line is headers
-                            end_value = difference + 2;
-                        }
-                        start_value = end_value - difference; // get the other side of values -- eventually want to make this modifiable too
-                        var t4 = performance.now();
-                        $.ajax({
-                            url: '/data-range/',
-                            data: "start=" + start_value + "&end=" + end_value,
-                            success: function(current_data) {
-                            console.log("Call to ajax took " + (performance.now() - t4) + " milliseconds.")
-                                set_sidebar(current_data); //set sidebar to exactly where the slider is
-                                var children = document.getElementById("graphs").children;
-                                for (var i = 0; i < children.length; i++) {
-                                    var tableChild = children[i];
-                                    var t0 = performance.now();
-                                    update_graph(current_data, tableChild.getAttribute("num"));
-                                    console.log("Call to update_graph took " + (performance.now() - t0) + " milliseconds.")
-                                }
-                            }
-                        });
+                    min: 1});
+               mySlider
+                .on("slideStop", function(event, ui) {
+                    //console.log(ui);
+                    end_value = mySlider.slider('getValue');
+                    if (end_value - difference < 2) { // first line is headers
+                        end_value = difference + 2;
                     }
-                }).width(width - $(".sidenav").width() - 50);
+                    start_value = end_value - difference; // get the other side of values -- eventually want to make this modifiable too
+                    let t4 = performance.now();
+                    $.ajax({
+                        url: '/data-range/',
+                        data: "start=" + start_value + "&end=" + end_value+"&filename="+filename,
+                        success: function(current_data) {
+                            console.log("Call to ajax took " + (performance.now() - t4) + " milliseconds.");
+                            set_sidebar(current_data); //set sidebar to exactly where the slider is
+                            let children = document.getElementById("graphs").children;
+                            for (let i = 0; i < children.length; i++) {
+                                let tableChild = children[i];
+                                let t0 = performance.now();
+                                update_graph(current_data, tableChild.getAttribute("num"));
+                                console.log("Call to update_graph took " + (performance.now() - t0) + " milliseconds.")
+                            }
+                        }
+                    });
+                });
+                $.ajax({
+                    url: '/data-range/',
+                    data: "start=" + 1 + "&end=" + difference+"&filename="+filename,
+                    success: function(result) {
+                        //console.log(result);
+                        set_sidebar_init(result);
+                    }
+                });
+
+                //.width(width - $(".sidenav").width() - 50);
+
             });
         }
     });
@@ -70,10 +77,11 @@ $(document).ready(function() {
     function update_graph(input_data, data_slot) {
         data_update = reformat_all_data(input_data, data_slot);
         range = get_range_of_array(input_data, data_slot);
+        console.log(range);
         range_update = {
             title: element_order[data_slot]+' at ' + data_update[0].x[0], // updates the title
-            'xaxis.range': [reformat_date(input_data[0][0]), reformat_date(input_data[input_data.length - 1][0])], // updates the xaxis range
-            'yaxis.range': [range[0], range[1]] // updates the end of the yaxis range
+            xaxis: {autorange: true},
+            yaxis: {autorange: true}
         };
         //console.log(range_update);
         Plotly.animate(div = graph_div + data_slot, {
@@ -82,34 +90,34 @@ $(document).ready(function() {
             /* With a bit of work, you can list any other traces you
                             want to update too (e.g. make a for loop over trace++ and set
                             update[trace] at each iteration) */
-            layout: range_update
-        }, {
-            // These 2 make sure the plot updates as quickly as possible:
-            transition: {
-                duration: 0
-            },
-            frame: {
-                duration: 0,
-                redraw: false
-            }
+
+        },
+        range_update).then(function(){
+        console.log(graph_div + data_slot);
+        Plotly.relayout( graph_div + data_slot, {
+            'xaxis.autorange': true,
+            'yaxis.autorange': true
         });
+
+        });
+
     }
 
     function get_range_of_array(data, position) {
         array = [];
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
             array[i] = data[i][position];
         }
         return [Array.min(array), Array.max(array)];
     }
 
     function reformat_all_data(data, position) { //this will take the data from the api and put it into the plotly.js graph data format
-        var data_type = [{
+        let data_type = [{
             x: [],
             y: [],
             type: 'scatter'
         }];
-        var i = 0;
+        let i = 0;
         if (data[0][0] == 'timestamp') {
             i = 1;
         } //if the first line is the headers, skip it
@@ -135,8 +143,8 @@ $(document).ready(function() {
 
     function set_sidebar_init(data_array) {
         element_order = data_array[0];
-        console.log(data_array);
-        for (var i = 0; i < data_array[0].length; i++) {
+        //console.log(data_array);
+        for (let i = 0; i < data_array[0].length; i++) {
             $('#' + element_order[i]).text(element_order[i] + ': ' + Math.round(data_array[1][i] * 100) / 100);
             $('#' + element_order[i]).attr('num', i);
             if(i >= 1){
@@ -165,7 +173,7 @@ $(document).ready(function() {
     }
 
     function set_sidebar(data_array) {
-        for (var i = 0; i < data_array[0].length; i++) {
+        for (let i = 0; i < data_array[0].length; i++) {
             $('#' + element_order[i]).text(element_order[i] + ': ' + Math.round(data_array[1][i] * 100) / 100);
         }
     }
@@ -181,11 +189,11 @@ $(document).ready(function() {
     }
 
     window.onresize = function() {
-        var children = document.getElementById("graphs").children;
-        for (var i = 0; i < children.length; i++) {
+        let children = document.getElementById("graphs").children;
+        for (let i = 0; i < children.length; i++) {
             Plotly.Plots.resize(children[i]);
         }
-        var width = $(window).width();
+        let width = $(window).width();
         $("#slider").width(width - $(".sidenav").width() - 50);
     };
 

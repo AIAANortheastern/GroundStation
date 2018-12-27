@@ -1,0 +1,30 @@
+{% extends "layout/layout.html" %}
+{% block body %}
+    {% if success: %}
+        <div class="alert alert-success" role="alert">
+          File has been uploaded successfully
+        </div>
+    {% elif success is defined: %}
+        <div class="alert alert-danger" role="alert">
+          File has not been uploaded successfully
+        </div>
+    {% endif %}
+
+<div class="jumbotron">
+  <h1 class="display-4">Upload Data</h1>
+  <p class="lead">Here you can upload data to be analyzed</p>
+</div>
+    <form enctype=multipart/form-data method=POST>
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroupFileAddon01">CSV File</span>
+          </div>
+          <div class="custom-file">
+              <input id="csv" name="csv" type="file" class="custom-file-input" aria-describedby="inputGroupFileAddon01">
+              <label class="custom-file-label" for="csv">Choose file</label>
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+        <button type="reset" class="btn btn-danger" value="Reset">Reset</button>
+    </form>
+{% endblock %}

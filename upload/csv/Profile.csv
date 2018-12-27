@@ -1,0 +1,143 @@
+[2017-06-02 14:08:22]	 ,            LocalMachineEvent::AppUpdate, 540.18 ms
+[2017-06-02 14:08:22]	 ,        Civ6App_PublishLocalMachine, 540.49 ms
+[2017-06-02 14:08:22]	 ,    Civ6App_PublishEvents, 540.52 ms
+[2017-06-02 14:08:22]	 ,----- FRAME: 0 time: 546.96ms Moving avg: 8.55ms 1 frames since last 
+[2017-06-02 14:08:30]	 ,    Graphics_ResourceListsIncFrame, 14.47 ms
+[2017-06-02 14:08:30]	 ,----- FRAME: 461 time: 17.59ms Moving avg: 16.32ms 462 frames since last 
+[2017-06-02 14:08:52]	 ,Civ6App_UpdateFrame, 115.11 ms
+[2017-06-02 14:08:52]	 ,----- FRAME: 1692 time: 115.51ms Moving avg: 17.35ms 1232 frames since last 
+[2017-06-02 14:09:07]	 ,    Graphics_SubmissionIncFrame, 47.98 ms
+[2017-06-02 14:09:07]	 ,Civ6App_Graphics_IncFrame, 48.10 ms
+[2017-06-02 14:09:07]	 ,----- FRAME: 2414 time: 64.09ms Moving avg: 9.65ms 723 frames since last 
+[2017-06-02 14:09:08]	 ,        Graphics_SubmissionIncFrame, 49.27 ms
+[2017-06-02 14:09:08]	 ,    Civ6App_Graphics_IncFrame, 49.40 ms
+[2017-06-02 14:09:08]	 ,----- FRAME: 2473 time: 51.18ms Moving avg: 14.42ms 60 frames since last 
+[2017-06-02 14:09:09]	 ,            Graphics_SubmissionIncFrame, 47.70 ms
+[2017-06-02 14:09:09]	 ,        Civ6App_Graphics_IncFrame, 47.90 ms
+[2017-06-02 14:09:09]	 ,----- FRAME: 2532 time: 50.18ms Moving avg: 16.43ms 60 frames since last 
+[2017-06-02 14:09:10]	 ,    Civ6App_UpdateFrame, 121.84 ms
+[2017-06-02 14:09:10]	 ,----- FRAME: 2579 time: 121.95ms Moving avg: 17.55ms 48 frames since last 
+[2017-06-02 14:09:16]	 ,        Civ6App_UpdateFrame, 172.45 ms
+[2017-06-02 14:09:16]	 ,----- FRAME: 2796 time: 172.55ms Moving avg: 12.93ms 218 frames since last 
+[2017-06-02 14:09:17]	 ,    Civ6App_UpdateFrame, 153.69 ms
+[2017-06-02 14:09:17]	 ,----- FRAME: 2797 time: 153.76ms Moving avg: 15.27ms 2 frames since last 
+[2017-06-02 14:09:19]	 ,        Graphics_SubmissionIncFrame, 30.15 ms
+[2017-06-02 14:09:19]	 ,    Civ6App_Graphics_IncFrame, 34.81 ms
+[2017-06-02 14:09:19]	 ,----- FRAME: 2870 time: 40.07ms Moving avg: 13.44ms 74 frames since last 
+[2017-06-02 14:09:20]	 ,            Graphics_SubmissionIncFrame, 30.55 ms
+[2017-06-02 14:09:20]	 ,        Civ6App_Graphics_IncFrame, 30.65 ms
+[2017-06-02 14:09:20]	 ,----- FRAME: 2905 time: 33.64ms Moving avg: 15.41ms 36 frames since last 
+[2017-06-02 14:09:20]	 ,            Graphics_SubmissionIncFrame, 31.21 ms
+[2017-06-02 14:09:20]	 ,        Civ6App_Graphics_IncFrame, 31.51 ms
+[2017-06-02 14:09:20]	 ,----- FRAME: 2930 time: 34.37ms Moving avg: 16.80ms 26 frames since last 
+[2017-06-02 14:09:20]	 ,            Graphics_SubmissionIncFrame, 36.15 ms
+[2017-06-02 14:09:20]	 ,        Civ6App_Graphics_IncFrame, 36.37 ms
+[2017-06-02 14:09:20]	 ,----- FRAME: 2934 time: 38.88ms Moving avg: 16.38ms 5 frames since last 
+[2017-06-02 14:09:21]	 ,            Graphics_SubmissionIncFrame, 31.13 ms
+[2017-06-02 14:09:21]	 ,        Civ6App_Graphics_IncFrame, 31.34 ms
+[2017-06-02 14:09:21]	 ,----- FRAME: 2988 time: 34.29ms Moving avg: 17.77ms 55 frames since last 
+[2017-06-02 14:09:23]	 ,            Graphics_SubmissionIncFrame, 47.69 ms
+[2017-06-02 14:09:23]	 ,        Civ6App_Graphics_IncFrame, 47.89 ms
+[2017-06-02 14:09:23]	 ,----- FRAME: 3078 time: 49.53ms Moving avg: 16.59ms 91 frames since last 
+[2017-06-02 14:09:24]	 ,            Graphics_SubmissionIncFrame, 49.77 ms
+[2017-06-02 14:09:24]	 ,        Civ6App_Graphics_IncFrame, 50.00 ms
+[2017-06-02 14:09:24]	 ,----- FRAME: 3138 time: 51.70ms Moving avg: 16.52ms 61 frames since last 
+[2017-06-02 14:09:24]	 ,            Graphics_SubmissionIncFrame, 33.31 ms
+[2017-06-02 14:09:24]	 ,        Civ6App_Graphics_IncFrame, 33.61 ms
+[2017-06-02 14:09:24]	 ,----- FRAME: 3145 time: 36.16ms Moving avg: 16.16ms 8 frames since last 
+[2017-06-02 14:09:24]	 ,            Graphics_SubmissionIncFrame, 33.69 ms
+[2017-06-02 14:09:24]	 ,        Civ6App_Graphics_IncFrame, 33.86 ms
+[2017-06-02 14:09:24]	 ,----- FRAME: 3147 time: 37.12ms Moving avg: 16.82ms 3 frames since last 
+[2017-06-02 14:09:24]	 ,            Graphics_SubmissionIncFrame, 31.02 ms
+[2017-06-02 14:09:24]	 ,        Civ6App_Graphics_IncFrame, 31.25 ms
+[2017-06-02 14:09:24]	 ,----- FRAME: 3150 time: 33.73ms Moving avg: 17.57ms 4 frames since last 
+[2017-06-02 14:09:24]	 ,            Graphics_SubmissionIncFrame, 31.19 ms
+[2017-06-02 14:09:24]	 ,        Civ6App_Graphics_IncFrame, 31.45 ms
+[2017-06-02 14:09:24]	 ,----- FRAME: 3161 time: 34.69ms Moving avg: 18.12ms 12 frames since last 
+[2017-06-02 14:09:25]	 ,            Graphics_SubmissionIncFrame, 31.93 ms
+[2017-06-02 14:09:25]	 ,        Civ6App_Graphics_IncFrame, 32.06 ms
+[2017-06-02 14:09:25]	 ,----- FRAME: 3213 time: 33.65ms Moving avg: 16.80ms 53 frames since last 
+[2017-06-02 14:09:26]	 ,            Graphics_SubmissionIncFrame, 30.01 ms
+[2017-06-02 14:09:26]	 ,        Civ6App_Graphics_IncFrame, 30.15 ms
+[2017-06-02 14:09:26]	 ,----- FRAME: 3219 time: 31.98ms Moving avg: 16.98ms 7 frames since last 
+[2017-06-02 14:09:26]	 ,            Graphics_SubmissionIncFrame, 35.12 ms
+[2017-06-02 14:09:26]	 ,        Civ6App_Graphics_IncFrame, 35.35 ms
+[2017-06-02 14:09:26]	 ,----- FRAME: 3223 time: 36.95ms Moving avg: 17.10ms 5 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 33.68 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 33.88 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3284 time: 35.46ms Moving avg: 17.63ms 62 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 37.85 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 38.13 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3287 time: 39.65ms Moving avg: 17.67ms 4 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 36.69 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 36.79 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3290 time: 38.75ms Moving avg: 18.41ms 4 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 37.21 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 37.44 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3295 time: 39.08ms Moving avg: 19.29ms 6 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 37.06 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 37.41 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3298 time: 38.78ms Moving avg: 19.61ms 4 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 56.80 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 56.96 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3301 time: 58.57ms Moving avg: 20.18ms 4 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 43.67 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 43.91 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3302 time: 48.55ms Moving avg: 20.65ms 2 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 35.13 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 35.38 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3304 time: 39.53ms Moving avg: 20.66ms 3 frames since last 
+[2017-06-02 14:09:27]	 ,            Graphics_SubmissionIncFrame, 42.35 ms
+[2017-06-02 14:09:27]	 ,        Civ6App_Graphics_IncFrame, 42.53 ms
+[2017-06-02 14:09:27]	 ,----- FRAME: 3306 time: 45.12ms Moving avg: 20.96ms 3 frames since last 
+[2017-06-02 14:09:28]	 ,            Graphics_SubmissionIncFrame, 41.41 ms
+[2017-06-02 14:09:28]	 ,        Civ6App_Graphics_IncFrame, 41.65 ms
+[2017-06-02 14:09:28]	 ,----- FRAME: 3308 time: 44.83ms Moving avg: 21.61ms 3 frames since last 
+[2017-06-02 14:09:28]	 ,            Graphics_SubmissionIncFrame, 36.56 ms
+[2017-06-02 14:09:28]	 ,        Civ6App_Graphics_IncFrame, 36.77 ms
+[2017-06-02 14:09:28]	 ,----- FRAME: 3310 time: 38.48ms Moving avg: 21.87ms 3 frames since last 
+[2017-06-02 14:09:28]	 ,            Graphics_SubmissionIncFrame, 34.13 ms
+[2017-06-02 14:09:28]	 ,        Civ6App_Graphics_IncFrame, 34.31 ms
+[2017-06-02 14:09:28]	 ,----- FRAME: 3313 time: 35.93ms Moving avg: 22.05ms 4 frames since last 
+[2017-06-02 14:09:28]	 ,            Graphics_SubmissionIncFrame, 47.67 ms
+[2017-06-02 14:09:28]	 ,        Civ6App_Graphics_IncFrame, 47.90 ms
+[2017-06-02 14:09:28]	 ,----- FRAME: 3317 time: 51.05ms Moving avg: 22.96ms 5 frames since last 
+[2017-06-02 14:09:32]	 ,            Graphics_SubmissionIncFrame, 31.34 ms
+[2017-06-02 14:09:32]	 ,        Civ6App_Graphics_IncFrame, 31.45 ms
+[2017-06-02 14:09:32]	 ,----- FRAME: 3570 time: 33.02ms Moving avg: 16.94ms 254 frames since last 
+[2017-06-02 14:09:40]	 ,            Civ6App_Graphics_Present, 210.29 ms
+[2017-06-02 14:09:40]	 ,        Civ6App_UpdateFrame, 211.59 ms
+[2017-06-02 14:09:40]	 ,----- FRAME: 4042 time: 211.66ms Moving avg: 19.70ms 473 frames since last 
+[2017-06-02 14:10:03]	 ,Graphics_SubmissionIncFrame, 31.27 ms
+[2017-06-02 14:10:03]	 ,Civ6App_Graphics_IncFrame, 31.48 ms
+[2017-06-02 14:10:03]	 ,----- FRAME: 5418 time: 33.49ms Moving avg: 15.75ms 1377 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 57.31 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 57.42 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5441 time: 59.07ms Moving avg: 17.35ms 24 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 30.28 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 30.38 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5445 time: 32.92ms Moving avg: 18.20ms 5 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 36.91 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 37.10 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5446 time: 39.60ms Moving avg: 18.53ms 2 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 55.27 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 55.39 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5449 time: 58.15ms Moving avg: 19.20ms 4 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 36.85 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 37.14 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5451 time: 40.59ms Moving avg: 19.42ms 3 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 45.40 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 45.52 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5454 time: 48.15ms Moving avg: 19.95ms 4 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 38.32 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 38.73 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5456 time: 40.66ms Moving avg: 20.56ms 3 frames since last 
+[2017-06-02 14:10:04]	 ,            Graphics_SubmissionIncFrame, 39.49 ms
+[2017-06-02 14:10:04]	 ,        Civ6App_Graphics_IncFrame, 39.70 ms
+[2017-06-02 14:10:04]	 ,----- FRAME: 5459 time: 45.38ms Moving avg: 21.26ms 4 frames since last 
+[2017-06-02 14:10:14]	 ,            Graphics_SubmissionIncFrame, 49.11 ms
+[2017-06-02 14:10:14]	 ,        Civ6App_Graphics_IncFrame, 49.26 ms
+[2017-06-02 14:10:14]	 ,----- FRAME: 5973 time: 51.13ms Moving avg: 15.51ms 515 frames since last 
+[2017-06-02 14:10:16]	 ,            Graphics_SubmissionIncFrame, 32.50 ms
+[2017-06-02 14:10:16]	 ,        Civ6App_Graphics_IncFrame, 32.73 ms
+[2017-06-02 14:10:16]	 ,----- FRAME: 6057 time: 34.60ms Moving avg: 7.62ms 85 frames since last 
