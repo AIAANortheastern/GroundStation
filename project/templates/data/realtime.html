@@ -1,0 +1,45 @@
+{% extends "layout/layout.html" %}
+{% block body %}
+<h4><span id="data_name" class="badge badge-secondary">New</span></h4>
+<div>
+    <div id="slider"></div>
+</div>
+<div class='graph' id="graphs"></div>
+<div class="sidenav">
+
+    <div id="gps" class="data">
+        <span style="font-weight:bold;color: #f1f1f1;">GPS Data:</span> <br>
+        <div id="longitude">Longitude:</div>
+        <div id="latitude">Latitude:</div>
+    </div>
+    <div id="gyro" class="data">
+        <span style="font-weight:bold;color: #f1f1f1;">Gyroscopic Data:</span> <br>
+        <button id="gyrox">x:</button>
+        <button id="gyroy">y:</button>
+        <button id="gyroz">z:</button>
+    </div>
+    <div id="mag" class="data">
+        <span style="font-weight:bold;color: #f1f1f1;">Magnetometer Data:</span> <br>
+        <button id="magx">x:</button>
+        <button id="magy">y:</button>
+        <button id="magz">z:</button>
+        <button id="rhall">rhall:</button>
+    </div>
+    <div id="alt" class="data">
+        <span style="font-weight:bold;color: #f1f1f1;">Altimeter Data:</span> <br>
+        <button id="pressure">Pressure:</button>
+        <button id="temperature">Temperature:</button>
+        <button id="altitude">Altitude:</button>
+    </div>
+    <div id="acc" class="data">
+        <span style="font-weight:bold;color: #f1f1f1;">Accelerometer Data:</span> <br>
+        <button id="accx">x:</button>
+        <button id="accy">y:</button>
+        <button id="accz">z:</button>
+    </div>
+</div>
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="{{ url_for('static', filename='javascript/realtime.js') }}"></script>
+{% endblock %}

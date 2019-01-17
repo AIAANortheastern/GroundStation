@@ -83,7 +83,7 @@ h2 {
     z-index: 1; /* Stay on top */
     top: 0; /* Stay at the top */
     right: 0;
-    background-color: #111; /* Black */
+    background-color: rgb(31, 119, 180); /* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 20px;
 }
@@ -124,4 +124,9 @@ h2 {
 .button {
     position: absolute;
     top: 50%;
+}
+
+.slider.slider-horizontal {
+    height: 20px;
+    width: 1000px;
 }
