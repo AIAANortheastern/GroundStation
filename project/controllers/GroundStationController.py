@@ -22,6 +22,69 @@ model = None
 def index():
     return render_template('index.html')
 
+async def time(websocket, path):
+    while True:
+        now = datetime.datetime.utcnow().isoformat() + 'Z'
+        await websocket.send(now)
+        await asyncio.sleep(random.random() * 3)
+
+start_server = websockets.serve(time, '127.0.0.1', 5678)
+
+
+
+@app.route('/realtime', methods=['GET'])
+def realtime():
+    try:
+        # model = FlaskRealtimeModel()
+        pass
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
+    asyncio.get_event_loop().run_until_complete(start_server)
+    asyncio.get_event_loop().run_forever()
+    return render_template('data/realtime.html')
+
+
+
+
+
+@app.route('/upload', methods=['GET'])
+def get_upload():
+    return render_template('data/upload.html')
+
+
+@app.route('/upload', methods=['POST'])
+def post_upload():
+    submitted_file = request.files['csv']
+    if submitted_file and allowed_filename(submitted_file.filename):
+        filename = secure_filename(submitted_file.filename)
+        submitted_file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        return render_template('data/upload.html', success=True)
+    return render_template('data/upload.html', success=False)
+
+
+@app.route('/select-columns', methods=['GET'])
+def select_column():
+    return render_template('data/column-selection.html')
+
+
+@app.route('/available-files', methods=['GET'])
+def show_files():
+    try:
+        model = FlaskFileModel()
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
+    return jsonify(model.query_uploaded_files())
+
+
+@app.route('/data-selection', methods=['GET'])
+def select_data():
+    global model
+    try:
+        model = FlaskFileModel()
+    except ModuleNotFoundError:
+        return jsonify({"code": "model_error", "message": "Model was not found", "data": {"status": 404}})
+    return render_template('data/data-selection.html', data=model.data)
+
 
 async def time(websocket, path):
     while True:
