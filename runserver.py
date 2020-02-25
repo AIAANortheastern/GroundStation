@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import os
-from project import app
+from project import app, socketio
 
 if __name__ == '__main__':
-		port = int(os.environ.get('PORT', 5000)) 
-		app.run(host="localhost", port=port)
+    socketio.run(app, debug=True)

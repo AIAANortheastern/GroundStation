@@ -1,5 +1,4 @@
-import threading
-import serial
+
 import json
 import time
 import math
@@ -8,6 +7,8 @@ import mmap
 import linecache
 from os import walk
 from pathlib import Path
+
+
 # Please note that this port name will have to be changed as necessary depending on what port the xbee is
 # connected to.
 PORT_NAME = None
@@ -32,17 +33,17 @@ class FlaskFileModel:
         self.upload_folder = 'upload\\csv\\'
 
 
-        self.file_length = self.data_length()
+        # self.file_length = self.data_length()
         self.data_pos = dict()
-        with open(self.filename, 'r') as f:
-            first_line = f.readline()
-            for key, data in self.data.items():
-                # for each key figure out what order it is in in the file.
-                self.array = first_line.split(',');
-                try:
-                    self.data_pos[key] = self.array.index(key)
-                except ValueError:
-                    self.data_pos[key] = -1
+        # with open(self.filename, 'r') as f:
+        #     first_line = f.readline()
+        #     for key, data in self.data.items():
+        #         # for each key figure out what order it is in in the file.
+        #         self.array = first_line.split(',');
+        #         try:
+        #             self.data_pos[key] = self.array.index(key)
+        #         except ValueError:
+        #             self.data_pos[key] = -1
 
         # load the data from the file to start parsing through it
 
@@ -57,6 +58,7 @@ class FlaskFileModel:
     #         pass
 
     # FILE data functions
+
 
     def query_uploaded_files(self):
         f = []

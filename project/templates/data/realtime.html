@@ -1,45 +1,210 @@
-{% extends "layout/layout.html" %}
-{% block body %}
-<h4><span id="data_name" class="badge badge-secondary">New</span></h4>
-<div>
-    <div id="slider"></div>
-</div>
-<div class='graph' id="graphs"></div>
-<div class="sidenav">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask SocketIO Test</title>
+    <!-- Plotly.js -->
+    <script type="application/javascript" src="{{ url_for('static', filename='javascript/plotly-latest.min.js') }}"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='javascript/socket.io.min.js') }}"></script>
 
-    <div id="gps" class="data">
-        <span style="font-weight:bold;color: #f1f1f1;">GPS Data:</span> <br>
-        <div id="longitude">Longitude:</div>
-        <div id="latitude">Latitude:</div>
-    </div>
-    <div id="gyro" class="data">
-        <span style="font-weight:bold;color: #f1f1f1;">Gyroscopic Data:</span> <br>
-        <button id="gyrox">x:</button>
-        <button id="gyroy">y:</button>
-        <button id="gyroz">z:</button>
-    </div>
-    <div id="mag" class="data">
-        <span style="font-weight:bold;color: #f1f1f1;">Magnetometer Data:</span> <br>
-        <button id="magx">x:</button>
-        <button id="magy">y:</button>
-        <button id="magz">z:</button>
-        <button id="rhall">rhall:</button>
-    </div>
-    <div id="alt" class="data">
-        <span style="font-weight:bold;color: #f1f1f1;">Altimeter Data:</span> <br>
-        <button id="pressure">Pressure:</button>
-        <button id="temperature">Temperature:</button>
-        <button id="altitude">Altitude:</button>
-    </div>
-    <div id="acc" class="data">
-        <span style="font-weight:bold;color: #f1f1f1;">Accelerometer Data:</span> <br>
-        <button id="accx">x:</button>
-        <button id="accy">y:</button>
-        <button id="accz">z:</button>
-    </div>
-</div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/og.css') }}"  type="text/css">
+    <script type="application/javascript" src="{{ url_for('static', filename='javascript/og.js') }}"></script>
 
-<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-<script src="{{ url_for('static', filename='javascript/realtime.js') }}"></script>
-{% endblock %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+
+</head>
+<body>
+<button onclick="exportToCSV(totalData);">Download CSV</button>
+<div class="container">
+    <div id="myDiv" style="margin-left: -100px; margin-bottom: 50px;"></div>
+
+    <div id="globus" style="height:500px; margin-bottom: 200px;"></div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    "use strict";
+    var stop = false;
+    var arrayLength = 300;
+    var pollingRate = 800;
+    var trace1 = {x: [], y: [], type: 'scatter'};
+    var trace2 = {x: [], y: [], yaxis: 'y2', type: 'scatter'};
+    var trace3 = {x: [], y: [], yaxis: 'y3', type: 'scatter'};
+    var trace4 = {x: [], y: [], yaxis: 'y4', type: 'scatter'};
+    var trace5 = {x: [], y: [], yaxis: 'y5', type: 'scatter'};
+    var trace6 = {x: [], y: [], yaxis: 'y6', type: 'scatter'};
+    var trace7 = {x: [], y: [], yaxis: 'y7', type: 'scatter'};
+    var trace8 = {x: [], y: [], yaxis: 'y8', type: 'scatter'};
+    var trace9 = {x: [], y: [], yaxis: 'y9', type: 'scatter'};
+
+    let totalData = [];
+    let current_data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9];
+    let namespace = '/test';
+    let socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port + namespace);
+
+
+    socket.on('connect', function () {
+        console.log('Websocket connected!');
+    });
+
+    function exportToCSV(arrayOfObjects) {
+
+        if (!arrayOfObjects.length) {
+            return;
+        }
+
+        var csvContent = "data:text/csv;charset=utf-8,";
+
+        // headers
+        //csvContent +=arrayOfObjects.shift().join(",")+"\n";
+
+        arrayOfObjects.forEach(function (item) {
+            csvContent += objectToCSVRow(item);
+        });
+
+        var encodedUri = encodeURI(csvContent);
+        var link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", "data.csv");
+        document.body.appendChild(link); // Required for FF
+        link.click();
+        document.body.removeChild(link);
+    }
+
+
+    function objectToCSVRow(dataObject) {
+        var string = dataObject[0].x + ",";
+        for(var i = 0; i < dataObject.length; i++){
+            string += dataObject[i].y + ",";
+        }
+        string = string.substring(0,string.length-1);
+        string+="\n";
+        return string;
+    }
+
+    function start() {
+        startPolling();
+    }
+
+    function changeLength() {
+        arrayLength = document.getElementById("array-length").value;
+    }
+
+    function changePollingRate() {
+        pollingRate = document.getElementById("polling-rate").value;
+    }
+
+    function createGame() {
+        stop = !stop;
+        if (stop) {
+            console.log("Stopped");
+        } else {
+            console.log("Started");
+            startPolling();
+        }
+    }
+
+    var layout = {
+        yaxis: {domain: [0, 1.0 / 9.0]},
+        legend: {traceorder: 'reversed'},
+        yaxis2: {domain: [1.0 / 9.0, 2.0 / 9.0]},
+        yaxis3: {domain: [2.0 / 9.0, 3.0 / 9.0]},
+        yaxis4: {domain: [3.0 / 9.0, 4.0 / 9.0]},
+        yaxis5: {domain: [4.0 / 9.0, 5.0 / 9.0]},
+        yaxis6: {domain: [5.0 / 9.0, 6.0 / 9.0]},
+        yaxis7: {domain: [6.0 / 9.0, 7.0 / 9.0]},
+        yaxis8: {domain: [7.0 / 9.0, 8.0 / 9.0]},
+        yaxis9: {domain: [8.0 / 9.0, 9.0 / 9.0]},
+        width: 1300,
+        height: 800,
+    };
+    Plotly.plot('myDiv', current_data, layout);
+    {#    Plotly.plot('myDiv', [{
+            x: currentArray.x,
+            y: currentArray.y,
+            mode: 'lines',
+            line: {color: '#80CAF6'}
+        }]);#}
+
+    var lat = 0, lon = 0, height = 0;
+    var time = performance.now();
+    socket.on('my_response', function (evt) {
+        let t2 = performance.now();
+        // console.log(evt);
+
+        let recieved_data = JSON.parse(evt);
+        //console.log(recieved_data);
+        totalData.push(recieved_data);
+        for (let i = 0; i < current_data.length; i++) {
+            current_data[i].x = concatArrayWithinLimit(current_data[i].x, [recieved_data[i].x], arrayLength);
+            current_data[i].y = concatArrayWithinLimit(current_data[i].y, [recieved_data[i].y], arrayLength);
+        }
+        console.log(current_data);
+        {#console.log(recieved_data);#}
+        {#console.log(current_data);#}
+        /*Plotly.animate("myDiv",current_data, layout , {
+            // These 2 make sure the plot updates as quickly as possible:
+            transition: {duration: 0},
+            frame: {duration: 0, redraw: false}
+        });*/
+        Plotly.update('myDiv', current_data, layout);
+        let t3 = performance.now();
+
+        lat = recieved_data[recieved_data.length - 3].y;
+        lon = recieved_data[recieved_data.length - 2].y;
+        height = recieved_data[recieved_data.length - 1].y;
+        collection.getEntities()[0].polyline.addPointLonLat(new og.LonLat(-113.5581 + lat/100, 40.43602, Math.abs(height*5000) + (time - performance.now())/10));
+    });
+
+
+    socket.on('connection', function (response) {
+        console.log(response);
+    });
+
+    function concatArrayWithinLimit(originalArray, newArray, maxLength) {
+        originalArray = originalArray.concat(newArray);
+
+        if (originalArray.length > maxLength) {
+            originalArray = originalArray.slice(originalArray.length - maxLength, originalArray.length);
+        }
+        return originalArray;
+
+    }
+
+
+    var osm = new og.layer.XYZ("OpenStreetMap", {
+        specular: [0.0003, 0.00012, 0.00001],
+        shininess: 1,
+        diffuse: [0.89, 0.9, 0.83],
+        isBaseLayer: true,
+        url: "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        visibility: true,
+        attribution: 'Data @ OpenStreetMap contributors, ODbL'
+    });
+
+    var collection = new og.layer.Vector("Collection", {
+        'entities':
+            [{
+                'polyline': {
+                    'pathLonLat': [[]],
+                    'thickness': 1,
+                    'color': "rgba(224, 229, 66, 0.92)"
+                }
+            }]
+    });
+    var globus = new og.Globe({
+        "target": "globus",
+        "name": "Earth",
+        "terrain": new og.terrain.GlobusTerrain(),
+        "layers": [osm, collection]
+    });
+
+    globus.planet.viewExtentArr([-113.4, 40.3, -113.6, 40.5]);
+
+</script>
+</body>
+</html>

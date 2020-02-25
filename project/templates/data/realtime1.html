@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask SocketIO Test</title>
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='javascript/socket.io.min.js') }}"></script>
+
+</head>
+<body>
+<p>Click to update data</p>
+<button onclick="start()">Begin</button>
+<button onclick="createGame()">Update graph</button>
+<input id="array-length" placeholder="300">
+<button onclick="changeLength()" >Change length</button>
+<input id="polling-rate" placeholder="800 (ms)">
+<button onclick="changePollingRate()" >Change polling rate</button>
+<div id="myDiv"></div>
+
+<script type="text/javascript" charset="utf-8">
+
+    var stop = false;
+    var arrayLength = 300;
+    var pollingRate = 800;
+    var trace1 = {x: [],y: [],type: 'scatter'};
+    var trace2 = {x: [], y: [], yaxis: 'y2', type: 'scatter'};
+    var trace3 = {x: [], y: [], yaxis: 'y3', type: 'scatter'};
+    var trace4 = {x: [], y: [], yaxis: 'y4', type: 'scatter'};
+    var trace5 = {x: [], y: [], yaxis: 'y5', type: 'scatter'};
+    var trace6 = {x: [], y: [], yaxis: 'y6', type: 'scatter'};
+    var trace7 = {x: [], y: [], yaxis: 'y7', type: 'scatter'};
+    var trace8 = {x: [], y: [], yaxis: 'y8', type: 'scatter'};
+    var trace9 = {x: [], y: [], yaxis: 'y9', type: 'scatter'};
+
+
+    let current_data = [trace1, trace2, trace3, trace4, trace5, trace6, trace7, trace8, trace9];
+    console.log(current_data);
+    let socket = io.connect();
+
+
+    socket.on('connect', function () {
+        console.log('Websocket connected!');
+    });
+
+    function start(){
+        startPolling();
+    }
+
+    function changeLength(){
+        arrayLength = document.getElementById("array-length").value;
+    }
+
+    function changePollingRate(){
+        pollingRate = document.getElementById("polling-rate").value;
+    }
+
+    function createGame() {
+        stop = !stop;
+        if (stop) {
+            console.log("Stopped");
+        } else {
+            console.log("Started");
+            startPolling();
+        }
+    }
+
+    var layout = {
+      yaxis: {domain: [0, 1.0/9.0]},
+      legend: {traceorder: 'reversed'},
+      yaxis2: {domain: [1.0/9.0, 2.0/9.0]},
+      yaxis3: {domain: [2.0/9.0, 3.0/9.0]},
+      yaxis4: {domain: [3.0/9.0, 4.0/9.0]},
+      yaxis5: {domain: [4.0/9.0, 5.0/9.0]},
+      yaxis6: {domain: [5.0/9.0, 6.0/9.0]},
+      yaxis7: {domain: [6.0/9.0, 7.0/9.0]},
+      yaxis8: {domain: [7.0/9.0, 8.0/9.0]},
+      yaxis9: {domain: [8.0/9.0, 9.0/9.0]},
+      width: 1500,
+      height: 800,
+    };
+    Plotly.plot('myDiv', current_data, layout);
+{#    Plotly.plot('myDiv', [{
+        x: currentArray.x,
+        y: currentArray.y,
+        mode: 'lines',
+        line: {color: '#80CAF6'}
+    }]);#}
+
+
+    socket.on('getData', function (evt) {
+        let t2 = performance.now();
+        //console.log("Data recieved:");
+        let recieved_data = JSON.parse(evt);
+        for(let i = 0; i < current_data.length; i++) {
+            current_data[i].x = concatArrayWithinLimit(current_data[i].x, [recieved_data[i].x], arrayLength);
+            current_data[i].y = concatArrayWithinLimit(current_data[i].y, [recieved_data[i].y], arrayLength);
+        }
+        console.log(recieved_data);
+        console.log(current_data);
+        Plotly.update('myDiv', current_data, layout);
+        let t3 = performance.now();
+        console.log("Call to getData took " + (t3 - t2) + " milliseconds.");
+    });
+
+    function concatArrayWithinLimit(originalArray, newArray, maxLength){
+        originalArray = originalArray.concat(newArray);
+
+        if (originalArray.length > maxLength) {
+            originalArray = originalArray.slice(originalArray.length - maxLength, originalArray.length);
+        }
+        return originalArray;
+
+    }
+
+    function startPolling() {
+        console.log("About to poll");
+        console.log(pollingRate);
+        let interval = setInterval(function () {
+            console.log("getData emitted")
+            socket.emit('getData', "");
+            if (stop) clearInterval(interval);
+        }, pollingRate);
+    }
+
+
+</script>
+</body>
+</html>
